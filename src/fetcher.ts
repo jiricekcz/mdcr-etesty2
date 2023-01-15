@@ -16,6 +16,7 @@ export interface Fetcher {
      * @param id The id of the thematic unit
      */
     getThematicUnitPage(id: string): Promise<string>;
+
 }
 
 export class AxiosFetcher implements Fetcher {

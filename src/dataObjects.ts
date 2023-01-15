@@ -6,7 +6,7 @@ export interface ThematicUnit {
     imageLink: string;
 }
 
-export interface PractiseQuestionUnit {
+export interface PractiseLecuture {
     name: string;
     id: string;
     url: string;

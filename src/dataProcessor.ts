@@ -1,4 +1,4 @@
-import { ThematicUnit, PractiseQuestionUnit } from "./dataObjects";
+import { ThematicUnit, PractiseLecuture } from "./dataObjects";
 import { Fetcher } from "./fetcher";
 import hp from "node-html-parser";
 /**
@@ -16,7 +16,7 @@ export interface DataProcessor {
     /**
      * Fetches the practise question units from the source.
      */
-    getPractiseQuestionUnits(thematicUnitId: string): Promise<PractiseQuestionUnit[]>;
+    getPractiseLecutures(thematicUnitId: string): Promise<PractiseLecuture[]>;
 }
 
 export interface DataProcessorOptions {
@@ -100,24 +100,24 @@ export class HTMLParserDataProcessor implements DataProcessor {
         return thematicUnits;
     }
 
-    async getPractiseQuestionUnits(thematicUnitId: string): Promise<PractiseQuestionUnit[]> {
+    async getPractiseLecutures(thematicUnitId: string): Promise<PractiseLecuture[]> {
         const html = await this.fetcher.getThematicUnitPage(thematicUnitId); // fetches raw html
         const root = hp.parse(html);
 
         const vertialMenuPanel = root.querySelector("#VerticalMenuPanel"); // Each practise question unit has a button in the vertical menu panel
         if (vertialMenuPanel === null) {
             throw new Error(
-                "Parse Error - getPractiseQuestionUnits: Unable to find vertical menu panel. The page may have changed. Please try updating the scraper. If the problem persists, please open a GitHub issue."
+                "Parse Error - getPractiseLecutures: Unable to find vertical menu panel. The page may have changed. Please try updating the scraper. If the problem persists, please open a GitHub issue."
             );
         }
 
-        const practiseQuestionUnitsLinks = vertialMenuPanel
+        const practiseLecuturesLinks = vertialMenuPanel
             .querySelectorAll("a")
             .filter((a) => a.getAttribute("href")?.startsWith("/Test/TestPractise/")); // selects all links in the vertical menu panel and filters out the ones that are not practise question units
 
-        const practiseQuestionUnits: PractiseQuestionUnit[] = [];
+        const practiseLecutures: PractiseLecuture[] = [];
 
-        for (const link of practiseQuestionUnitsLinks) {
+        for (const link of practiseLecuturesLinks) {
             const url = link.getAttribute("href")?.replace("/", ""); // The url is in the href attribute
             const id = url?.split("/").at(-1); // The id is the last item in the url
             const title = link.structuredText; // The title is the text of the link
@@ -125,22 +125,22 @@ export class HTMLParserDataProcessor implements DataProcessor {
             if (url === undefined || id === undefined || title === undefined) {
                 if (this.options.warnOnNonFatalParseErrors)
                     console.warn(
-                        "Parse Error - getPractiseQuestionUnits: Unable to parse practise question unit. This is a non-fatal error. This practise question unit will be skipped. Set 'warnOnNonFatalParseErrors' to 'false' to disable this warning."
+                        "Parse Error - getPractiseLecutures: Unable to parse practise lecture. This is a non-fatal error. This practise lecture will be skipped. Set 'warnOnNonFatalParseErrors' to 'false' to disable this warning."
                     );
                 if (this.options.errorOnNonFatalParseErrors)
                     throw new Error(
-                        "Parse Error - getPractiseQuestionUnits: Unable to parse practise question unit. This is a non-fatal error. This practise question unit can be skipped if 'errorOnNonFatalParseErrors' is set to 'false'"
+                        "Parse Error - getPractiseLecutures: Unable to parse practise lecture. This is a non-fatal error. This practise lecture can be skipped if 'errorOnNonFatalParseErrors' is set to 'false'"
                     );
                 continue;
             }
 
-            practiseQuestionUnits.push({
+            practiseLecutures.push({
                 url,
                 id,
                 name: title,
             });
         }
 
-        return practiseQuestionUnits;
+        return practiseLecutures;
     }
 }
