@@ -6,7 +6,16 @@ import axios from "axios";
 export interface Fetcher {
     readonly url: string;
 
+    /**
+     * Fetches /Home
+     */
     getHomePage(): Promise<string>;
+
+    /**
+     * Fetches the page for a thematic unit.
+     * @param id The id of the thematic unit
+     */
+    getThematicUnitPage(id: string): Promise<string>;
 }
 
 export class AxiosFetcher implements Fetcher {
@@ -42,4 +51,14 @@ export class AxiosFetcher implements Fetcher {
     public async getHomePage(): Promise<string> {
         return await this.get("Home");
     }
+
+    /**
+     * Fetches the html of the thematic unit page.
+     * @param id The id of the thematic unit
+     * @returns The HTML of the thematic unit page.
+     */
+    public async getThematicUnitPage(id: string): Promise<string> {
+        return await this.get(`Home/Tests/${id}`);
+    }
+
 }
