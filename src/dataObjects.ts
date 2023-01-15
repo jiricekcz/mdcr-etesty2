@@ -5,3 +5,9 @@ export interface ThematicUnit {
     description: string;
     imageLink: string;
 }
+
+export interface PractiseQuestionUnit {
+    name: string;
+    id: string;
+    url: string;
+}
