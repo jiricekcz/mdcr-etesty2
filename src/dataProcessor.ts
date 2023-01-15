@@ -104,7 +104,7 @@ export class HTMLParserDataProcessor implements DataProcessor {
         const html = await this.fetcher.getThematicUnitPage(thematicUnitId); // fetches raw html
         const root = hp.parse(html);
 
-        const vertialMenuPanel = root.querySelector(".VerticalMenuPanel"); // Each practise question unit has a button in the vertical menu panel
+        const vertialMenuPanel = root.querySelector("#VerticalMenuPanel"); // Each practise question unit has a button in the vertical menu panel
         if (vertialMenuPanel === null) {
             throw new Error(
                 "Parse Error - getPractiseQuestionUnits: Unable to find vertical menu panel. The page may have changed. Please try updating the scraper. If the problem persists, please open a GitHub issue."
