@@ -17,6 +17,17 @@ export interface Fetcher {
      */
     getThematicUnitPage(id: string): Promise<string>;
 
+    /**
+     * Fetches json data for a practise lecture.
+     * @param lectureId The id of the lecture
+     */
+    getSamplePractiseLectureTest(lectureId: string): Promise<{Questions:{QuestionID: number, Code: string, CorrectAnswers: string[]}[]}>;
+
+    /**
+     * Fetches the html for a question.
+     * @param questionId The id of the question
+     */
+    getQuestion(questionId: string): Promise<string>;
 }
 
 export class AxiosFetcher implements Fetcher {
@@ -40,9 +51,9 @@ export class AxiosFetcher implements Fetcher {
      * @param body The body of the post request
      * @returns The raw data from the source.
      */
-    public async post(path: string, body: string): Promise<string> {
+    public async post<T>(path: string, body: string): Promise<T> {
         const response = await axios.post(this.constructUrl(path), body);
-        return response.data as string;
+        return response.data as T;
     }
 
     /**
@@ -62,4 +73,21 @@ export class AxiosFetcher implements Fetcher {
         return await this.get(`Home/Tests/${id}`);
     }
 
+    /**
+     * Fetches JSON of a practise lecture test.
+     * @param lectureId Id of the lecture
+     * @returns Raw JSON data
+     */
+    public async getSamplePractiseLectureTest(lectureId: string): Promise<{Questions:{QuestionID: number, Code: string, CorrectAnswers: string[]}[]}> {
+        return await this.post(`Test/GeneratePractise/`, `lectureID=${lectureId}`);
+    }
+
+    /**
+     * Fetches the HTML of a question.
+     * @param questionId The id of the question
+     * @returns Raw HTML data
+     */
+    public async getQuestion(questionId: string): Promise<string> {
+        return await this.post(`Test/RenderQuestion/`, `id=${questionId}`);
+    }
 }
