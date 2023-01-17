@@ -1,4 +1,11 @@
-import { ThematicUnit, PractiseLecuture, QuestionInfo, Question, QuestionResource, QuestionAnswer } from "./dataObjects";
+import {
+    ThematicUnit,
+    PractiseLecuture,
+    QuestionInfo,
+    Question,
+    QuestionResource,
+    QuestionAnswer,
+} from "./dataObjects";
 import { Fetcher } from "./fetcher";
 import hp from "node-html-parser";
 /**
@@ -191,7 +198,6 @@ export class HTMLParserDataProcessor implements DataProcessor {
                 texts.push(questionText.structuredText);
                 continue;
             }
-            
 
             if (this.options.warnOnNonFatalParseErrors) {
                 console.warn(
@@ -210,20 +216,22 @@ export class HTMLParserDataProcessor implements DataProcessor {
 
         if (imageFrame === undefined) {
             throw new Error(
-                "Parse Error - getQuestion: Unable to parse question content frame. The page may have changed. Please try updating the scraper. If the problem persists, please open a GitHub issue. Question ID: " + questionId
+                "Parse Error - getQuestion: Unable to parse question content frame. The page may have changed. Please try updating the scraper. If the problem persists, please open a GitHub issue. Question ID: " +
+                    questionId
             );
         }
         if (resourcesHTML === undefined) {
             throw new Error(
-                "Parse Error - getQuestion: Unable to parse question content. The page may have changed. Please try updating the scraper. If the problem persists, please open a GitHub issue. Question ID: " + questionId
+                "Parse Error - getQuestion: Unable to parse question content. The page may have changed. Please try updating the scraper. If the problem persists, please open a GitHub issue. Question ID: " +
+                    questionId
             );
         }
-        const isHTMLElement = (node: typeof resourcesHTML[number]): node is typeof root => node.nodeType === hp.NodeType.ELEMENT_NODE;
+        const isHTMLElement = (node: typeof resourcesHTML[number]): node is typeof root =>
+            node.nodeType === hp.NodeType.ELEMENT_NODE;
         const resources: QuestionResource[] = [];
         for (const resourceHTML of resourcesHTML) {
-            if (!isHTMLElement(resourceHTML)) continue; 
-            
-            
+            if (!isHTMLElement(resourceHTML)) continue;
+
             if (resourceHTML.classNames.includes("question-text")) continue;
 
             if (resourceHTML.tagName.toLocaleLowerCase() === "img") {
@@ -291,7 +299,11 @@ export class HTMLParserDataProcessor implements DataProcessor {
 
             if (resourceHTML.tagName.toLocaleLowerCase() === "div") {
                 const elementNodes = resourceHTML.childNodes.filter(isHTMLElement);
-                if (elementNodes.length == 2 && elementNodes[0]?.tagName.toLocaleLowerCase() === "img" && elementNodes[1]?.tagName.toLocaleLowerCase() === "a") {
+                if (
+                    elementNodes.length == 2 &&
+                    elementNodes[0]?.tagName.toLocaleLowerCase() === "img" &&
+                    elementNodes[1]?.tagName.toLocaleLowerCase() === "a"
+                ) {
                     const src = elementNodes[0].getAttribute("src");
                     const content = elementNodes[1].structuredText;
 
@@ -316,7 +328,6 @@ export class HTMLParserDataProcessor implements DataProcessor {
                     });
                     continue;
                 }
-
             }
             if (this.options.warnOnNonFatalParseErrors) {
                 console.warn(
@@ -331,20 +342,31 @@ export class HTMLParserDataProcessor implements DataProcessor {
         }
 
         // Answers
-        
+
         const answersHTML = root.querySelectorAll(".answer");
-        
+
         const answers: QuestionAnswer[] = [];
         for (const answerHTML of answersHTML) {
-            
             const answerId = answerHTML.getAttribute("data-answerid");
-            if (answerId === undefined) throw new Error("Parse Error - getQuestion: Unable to parse answer ID. The page may have changed. Please try updating the scraper. If the problem persists, please open a GitHub issue. Question ID: " + questionId);
-            
+            if (answerId === undefined)
+                throw new Error(
+                    "Parse Error - getQuestion: Unable to parse answer ID. The page may have changed. Please try updating the scraper. If the problem persists, please open a GitHub issue. Question ID: " +
+                        questionId
+                );
+
             const answerCheckbox = answerHTML.querySelector(".answer-checkbox");
-            if (answerCheckbox === null) throw new Error("Parse Error - getQuestion: Unable to parse answer checkbox. The page may have changed. Please try updating the scraper. If the problem persists, please open a GitHub issue. Question ID: " + questionId);
-            
+            if (answerCheckbox === null)
+                throw new Error(
+                    "Parse Error - getQuestion: Unable to parse answer checkbox. The page may have changed. Please try updating the scraper. If the problem persists, please open a GitHub issue. Question ID: " +
+                        questionId
+                );
+
             const textParagraph = answerHTML.querySelector("p");
-            if (textParagraph === null) throw new Error("Parse Error - getQuestion: Unable to parse answer text. The page may have changed. Please try updating the scraper. If the problem persists, please open a GitHub issue. Question ID: " + questionId);
+            if (textParagraph === null)
+                throw new Error(
+                    "Parse Error - getQuestion: Unable to parse answer text. The page may have changed. Please try updating the scraper. If the problem persists, please open a GitHub issue. Question ID: " +
+                        questionId
+                );
             answers.push({
                 id: answerId,
                 marker: answerCheckbox.structuredText.trim(),
@@ -352,11 +374,10 @@ export class HTMLParserDataProcessor implements DataProcessor {
             });
         }
 
-
         return {
             answers: answers,
             resources: resources,
-            texts: texts.map(text=> text.trim()).filter(text => text.length > 0)
+            texts: texts.map((text) => text.trim()).filter((text) => text.length > 0),
         };
     }
 }

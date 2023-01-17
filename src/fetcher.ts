@@ -21,7 +21,9 @@ export interface Fetcher {
      * Fetches json data for a practise lecture.
      * @param lectureId The id of the lecture
      */
-    getSamplePractiseLectureTest(lectureId: string): Promise<{Questions:{QuestionID: number, Code: string, CorrectAnswers: string[]}[]}>;
+    getSamplePractiseLectureTest(
+        lectureId: string
+    ): Promise<{ Questions: { QuestionID: number; Code: string; CorrectAnswers: string[] }[] }>;
 
     /**
      * Fetches the html for a question.
@@ -78,7 +80,9 @@ export class AxiosFetcher implements Fetcher {
      * @param lectureId Id of the lecture
      * @returns Raw JSON data
      */
-    public async getSamplePractiseLectureTest(lectureId: string): Promise<{Questions:{QuestionID: number, Code: string, CorrectAnswers: string[]}[]}> {
+    public async getSamplePractiseLectureTest(
+        lectureId: string
+    ): Promise<{ Questions: { QuestionID: number; Code: string; CorrectAnswers: string[] }[] }> {
         return await this.post(`Test/GeneratePractise/`, `lectureID=${lectureId}`);
     }
 
