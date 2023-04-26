@@ -81,8 +81,19 @@ export class HTMLParserDataProcessor implements DataProcessor {
                     );
                 continue;
             }
-
+            
             const url = onClick.split("'")[1]?.replace("/", ""); // The url is the second item in the onclick attribute
+            if (url && typeof url !== "string") {
+                if (this.options.warnOnNonFatalParseErrors)
+                    console.warn(
+                        `Parse Error - getThematicUnits: URL is not a string, but ${typeof url}. This is a non-fatal error. This thematic unit will be skipped. Set 'warnOnNonFatalParseErrors' to 'false' to disable this warning.`
+                    );
+                if (this.options.errorOnNonFatalParseErrors)
+                    throw new Error(
+                        `Parse Error - getThematicUnits: RL is not a string, but ${typeof url}. This is a non-fatal error. This thematic unit can be skipped if 'errorOnNonFatalParseErrors' is set to 'false'`
+                    );
+                continue;
+            }
             const id = url?.split("/")?.at(-1); // The id is the last item in the url
             if (url === undefined || id === undefined) {
                 if (this.options.warnOnNonFatalParseErrors)
