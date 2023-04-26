@@ -83,7 +83,7 @@ export class HTMLParserDataProcessor implements DataProcessor {
             }
 
             const url = onClick.split("'")[1]?.replace("/", ""); // The url is the second item in the onclick attribute
-            const id = url?.split("/").at(-1); // The id is the last item in the url
+            const id = url?.split("/")?.at(-1); // The id is the last item in the url
             if (url === undefined || id === undefined) {
                 if (this.options.warnOnNonFatalParseErrors)
                     console.warn(
