@@ -1,7 +1,7 @@
 import { AxiosFetcher } from "./fetcher";
 import { HTMLParserDataProcessor } from "./dataProcessor";
 import { QuestionInfo, QuestionWithCorrectAnswer } from "./dataObjects";
-import { promises as fs } from "fs";
+import { promises as fs, existsSync } from "fs";
 
 const fetcher = new AxiosFetcher("https://etesty2.mdcr.cz");
 const processor = new HTMLParserDataProcessor(fetcher);
@@ -13,9 +13,15 @@ const processor = new HTMLParserDataProcessor(fetcher);
 
 async function main(): Promise<void> {
     const thematicUnits = await processor.getThematicUnits();
-    const questions: Record<string, QuestionWithCorrectAnswer> = JSON.parse(await fs.readFile("./output.json", "utf-8"));
+    if (existsSync("./output.json")) {
+        var quests: Record<string, QuestionWithCorrectAnswer> = JSON.parse(await fs.readFile("./output.json", "utf-8"));
+    } else {
+        var quests: Record<string, QuestionWithCorrectAnswer> = {};
+    }
+    const questions = quests;
     console.log(`------------------\n${thematicUnits.length} thematic units found\n------------------`);
     for (const thematicUnit of thematicUnits) {
+        if (thematicUnit.id !== "ro") continue;
         console.log(`\t${thematicUnit.name}`);
         const practiseLectures = await processor.getPractiseLecutures(thematicUnit.id);
         console.log(`\t\t${practiseLectures.length} practise lectures found`);

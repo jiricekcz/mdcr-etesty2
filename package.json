@@ -1,25 +1,26 @@
 {
-	"name": "typescript-npm-module",
+	"name": "mdcr-etesty2",
 	"version": "1.0.0",
-	"description": "A generic typescript npm package",
+	"description": "Fetcher for the Czech Ministry of Transport e-testy website",
 	"main": "./lib/index.js",
 	"types": "lib/index.d.ts",
 	"scripts": {
 		"test": "npx jest",
 		"build": "tsc",
+		"start": "node ./lib/index.js",
 		"format": "npx prettier --write \"src/**/*.ts\"",
 		"prepare": "npm run format && npm run build && npm test"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/jiricekcz/typescript-npm-module.git"
+		"url": "git+https://github.com/jiricekcz/mdcr-etesty2.git"
 	},
 	"author": "jiricekcz",
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/jiricekcz/typescript-npm-module/issues"
+		"url": "https://github.com/jiricekcz/mdcr-etesty2/issues"
 	},
-	"homepage": "https://github.com/jiricekcz/typescript-npm-module#readme",
+	"homepage": "https://github.com/jiricekcz/mdcr-etesty2#readme",
 	"devDependencies": {
 		"@types/node": "^17.0.10",
 		"jest": "^27.4.7",
