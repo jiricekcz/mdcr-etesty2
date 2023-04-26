@@ -94,6 +94,7 @@ export class HTMLParserDataProcessor implements DataProcessor {
                     );
                 continue;
             }
+            console.log(url);
             const id = url ? url?.split("/")?.at(-1) : undefined; // The id is the last item in the url
             if (url === undefined || id === undefined) {
                 if (this.options.warnOnNonFatalParseErrors)
