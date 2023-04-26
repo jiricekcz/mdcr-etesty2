@@ -150,7 +150,7 @@ export class HTMLParserDataProcessor implements DataProcessor {
 
         for (const link of practiseLecuturesLinks) {
             const url = link.getAttribute("href")?.replace("/", ""); // The url is in the href attribute
-            const id = url?.split("/").[url?.split("/").length - 1]; // The id is the last item in the url
+            const id = url?.split("/")[url?.split("/").length - 1]; // The id is the last item in the url
             const title = link.structuredText; // The title is the text of the link
 
             if (url === undefined || id === undefined || title === undefined) {
