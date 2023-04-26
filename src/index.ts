@@ -36,7 +36,9 @@ async function main(): Promise<void> {
                     process.stdout.clearLine(0);
                     process.stdout.cursorTo(0);
                     process.stdout.write(
-                        `\t\t\t\tProcessed ${i + 1}/${questionsInfo.length} questions. Question ${questionInfo.code} skipped, already loaded.`
+                        `\t\t\t\tProcessed ${i + 1}/${questionsInfo.length} questions. Question ${
+                            questionInfo.code
+                        } skipped, already loaded.`
                     );
                     continue;
                 }
